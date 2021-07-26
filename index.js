@@ -10,6 +10,9 @@ async function click(button) {
 (async () => {
 
     const target_url = 'https://www.booking.com';
+    Address = "Dhaka";
+    Check_in_date = "2021-07-30";
+    Check_Out_date = "2021-08-03";
 
     
     const browser = await puppeteer.launch({
@@ -32,16 +35,20 @@ async function click(button) {
     await page.waitForSelector('#ss', {timeout : 100});
     console.log('Got the Address box');
 
-    await page.type('#ss',"Dhaka",{delay : 220});
+    await page.type('#ss',Address,{delay : 220});
     console.log('Address Input Complete');
 
     cal = await page.waitForXPath('//*[@id="frm"]/div[1]/div[2]/div[1]/div[2]/div/div/div/div/span');
         
     await click(cal);
 
-    date1 = await page.waitForXPath('//td[@data-date = "2021-07-30"]');
-    await click(date1);
-    date2 = await page.waitForXPath('//td[@data-date = "2021-08-02"]');
+    path_1= await '//td[@data-date = "'+Check_in_date +'"]';
+    path_2= await '//td[@data-date = "'+Check_Out_date +'"]' ;
+
+    date1 = await page.waitForXPath(path_1);
+    await click(date1); 
+    date2 = await page.waitForXPath(path_2);
+    await click(date2);
 
     await page.click('#xp__guests__toggle');
 
@@ -69,10 +76,7 @@ async function click(button) {
             if(price != null){
                 details.Price = price.innerText;
             }
-
-            // const awards = row.querySelector('td.film-awards');
-            // details.Awards = awards.innerText;
-
+            
             return details;
 
         })
